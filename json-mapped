@@ -20,7 +20,7 @@ def get_box(text):
                 init_cord.append(txt["geometry"]["position"]["x"])
                 init_cord.append(txt["geometry"]["position"]["y"])
                 init_cord.append(txt["geometry"]["position"]["z"])
-                # записываем переещения
+                # записываем перемещения
                 disp.append(txt["geometry"]["dimensions"]["x"])
                 disp.append(txt["geometry"]["dimensions"]["y"])
                 disp.append(txt["geometry"]["dimensions"]["z"])
@@ -110,7 +110,7 @@ def get_box(text):
                 init_cord.append(txt["geometry"]["position"]["x"])
                 init_cord.append(txt["geometry"]["position"]["y"])
                 init_cord.append(txt["geometry"]["position"]["z"])
-                # записываем переещения
+                # записываем перемещения
                 disp.append(txt["geometry"]["dimensions"]["x"])
                 disp.append(txt["geometry"]["dimensions"]["y"])
                 disp.append(txt["geometry"]["dimensions"]["z"])
