@@ -32,9 +32,17 @@ def _dot_prod(point,normals):
     dot = np.abs(dot)
     return dot
 
+def _fi_theta_depth_to_point(fi, theta, depth):
+    normal = np.array([
+        math.sin(theta) * math.cos(fi),
+        math.sin(theta) * math.sin(fi),
+        math.cos(theta)
+    ])
+    return normal * depth
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-def hough_planes(points, threshold, fi_step=1, fi_bounds=[0,360], theta_step=1, theta_bounds=[0,180], depth_grads=100):
+def hough_planes(points, threshold=None, fi_step=1, fi_bounds=[0,360], theta_step=1, theta_bounds=[0,180], depth_grads=100):
     fis = np.arange(fi_bounds[0], fi_bounds[1], fi_step)
     thetas = np.arange(theta_bounds[0], theta_bounds[1], theta_step)
 
@@ -66,14 +74,18 @@ def hough_planes(points, threshold, fi_step=1, fi_bounds=[0,360], theta_step=1, 
         accum[fi_idxes, theta_idxes, dists] += 1
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    points_best = []
-    for i in range(len(fis)):
-        for j in range(len(thetas)):
-            for k in range(depth_grads):
-                v = accum[i, j, k]
-                if v >= threshold:
-                    points_best.append([i, j, k, v])
-    points_best = np.array(points_best)
+    if threshold is not None:
+        points_best = []
+        for i in range(len(fis)):
+            for j in range(len(thetas)):
+                for k in range(depth_grads):
+                    v = accum[i, j, k]
+                    if v >= threshold:
+                        points_best.append([i, j, k, v])
+        points_best = np.array(points_best)
+        if len(points_best) == 0:
+            print('Failed to find hough planes: all points below threshold')
+            return None, None
 
 
     pcd = o3d.geometry.PointCloud()
@@ -106,7 +118,7 @@ def hough_planes(points, threshold, fi_step=1, fi_bounds=[0,360], theta_step=1, 
         fi = (fi_bounds[0] + coord[0]*fi_step) / 180 * np.pi
         theta = (theta_bounds[0] + coord[1]*theta_step) / 180 * np.pi
         depth = coord[2] / depth_grads * points_max
-        point = fi_theta_depth_to_point(fi, theta,depth)
+        point = _fi_theta_depth_to_point(fi, theta,depth)
         print('fi,theta,depth', fi,theta,depth)
         print('point', point)
 
@@ -115,12 +127,3 @@ def hough_planes(points, threshold, fi_step=1, fi_bounds=[0,360], theta_step=1, 
     planes_out = np.array(planes_out)
 
     return planes_out, points_best
-
-
-def fi_theta_depth_to_point(fi, theta, depth):
-    normal = np.array([
-        math.sin(theta) * math.cos(fi),
-        math.sin(theta) * math.sin(fi),
-        math.cos(theta)
-    ])
-    return normal * depth
