@@ -1,3 +1,5 @@
+#!/bin/sh
+"exec" "`dirname $0`/venv/bin/python" "$0" "$@"
 import speech_recognition as sr
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
