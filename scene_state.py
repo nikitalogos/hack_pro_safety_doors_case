@@ -63,6 +63,9 @@ class SceneState:
     def add_object(self, object_:SceneObject):
         self.objects.append(object_)
 
+    def set_door_open_percent(self, percent):
+        self.door_open_percent = percent
+
     def is_can_move(self):
         return len(self.events) == 0
 

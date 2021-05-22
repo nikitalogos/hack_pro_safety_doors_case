@@ -1,14 +1,19 @@
-#! /usr/bin/python3
+#!/bin/sh
+"exec" "`dirname $0`/venv/bin/python" "$0" "$@"
 
 from argparse import ArgumentParser
 import numpy as np
 import open3d as o3d
+import json
+from pprint import PrettyPrinter
+pp = PrettyPrinter(indent=4)
 
 from clusterization import clusterize
 
 if __name__ == '__main__':
     ap = ArgumentParser()
-    ap.add_argument('-i', '--input', type=str, required=True)
+    ap.add_argument('-i', '--input', type=str, required=True, help="Input .pcd file")
+    ap.add_argument('-o', '--output', type=str, help='Output json file')
     args = vars(ap.parse_args())
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -37,4 +42,18 @@ if __name__ == '__main__':
     points = np.asarray(pcd.points)
     print(f'Applied filtering. {len(points)} points remaining')
 
-    clusterize(points, is_plotting=False)
+    scene = clusterize(points, is_plotting=False)
+    if scene is None:
+        print('SCENE ANALYSIS FAILED!')
+        exit(1)
+
+    data_json = scene.to_json()
+    print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~SCENE STATE~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+    pp.pprint(data_json)
+    print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+
+    file_out = args['output']
+    if file_out is not None:
+        with open(file_out, 'w') as outf:
+            json.dump(data_json, outf)
+        print(f'Wrote results to {file_out}')

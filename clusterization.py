@@ -3,6 +3,8 @@ import math
 import open3d as o3d
 from hough_plane_transform import hough_planes
 
+from scene_state import SceneState, SceneEvents, SceneObject, ObjectTypes
+
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~START VIZUALIZATION~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 from plotly.offline import iplot
 from plotly import graph_objs as go
@@ -312,10 +314,12 @@ def vec_len(vec):
 
 FLOOR_TRIM_DIST_M = 0.1
 DOOR_ZONE_WIDTH_M = 0.05
+
 DOOR_STEP_M = 0.1
 DOOR_OPEN_THRESHOLD = 40
+DOOR_FULL_OPEN_M = 0.6
 
-def clusterize(points, is_plotting=False):
+def clusterize(points, is_plotting=False) -> object or None:
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~find floor plane. remove floor points~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     pf_vector = find_platform_floor(points, is_plotting=is_plotting)
     if pf_vector is None:
@@ -359,7 +363,12 @@ def clusterize(points, is_plotting=False):
     print(f'Removed {remove_num} points beyond the door')
     points = points_masked
 
-    # door open percent
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PERFORM ANALYSIS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PERFORM ANALYSIS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+    scene = SceneState()
+
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~start door open percent~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    print('~~~~~~~~~~~~~~~~~~~~door open percent~~~~~~~~~~~~~~~~~~~~')
     if is_plotting:
         show_points(points_door)
 
@@ -414,7 +423,12 @@ def clusterize(points, is_plotting=False):
     door_open_width = max_open_sequence * DOOR_STEP_M
     print('door_open_width', door_open_width)
 
-    # detect blobs from remaining points
+    door_open_percent = int(door_open_width / DOOR_FULL_OPEN_M * 100)
+    door_open_percent = min(door_open_percent, 100)
+    scene.set_door_open_percent(door_open_percent)
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end door open percent~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~start detect blobs from remaining points~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    print('~~~~~~~~~~~~~~~~~~~~detect objects~~~~~~~~~~~~~~~~~~~~')
     if is_plotting:
         show_points(points)
 
@@ -444,9 +458,20 @@ def clusterize(points, is_plotting=False):
 
     print('clusters.keys()', clusters.keys())
 
-    # if is_plotting:
-    show_clusters(clusters)
+    if is_plotting:
+        show_clusters(clusters)
 
+    for cluster in clusters:
+        obj = SceneObject(
+            object_type=ObjectTypes.HUMAN,
+        )
+        scene.add_object(obj)
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end detect blobs from remaining points~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~start compute events~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # pass
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end compute events~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    return scene
 
 
 
