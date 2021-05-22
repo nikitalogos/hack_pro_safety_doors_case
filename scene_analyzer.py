@@ -37,4 +37,4 @@ if __name__ == '__main__':
     points = np.asarray(pcd.points)
     print(f'Applied filtering. {len(points)} points remaining')
 
-    clusterize(points, is_plotting=True)
+    clusterize(points, is_plotting=False)

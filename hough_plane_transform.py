@@ -42,7 +42,9 @@ def _fi_theta_depth_to_point(fi, theta, depth):
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-def hough_planes(points, threshold=None, fi_step=1, fi_bounds=[0,360], theta_step=1, theta_bounds=[0,180], depth_grads=100):
+def hough_planes(points, threshold,
+                 fi_step=1, fi_bounds=[0,360], theta_step=1, theta_bounds=[0,180],
+                 depth_grads=100, depth_start=0):
     fis = np.arange(fi_bounds[0], fi_bounds[1], fi_step)
     thetas = np.arange(theta_bounds[0], theta_bounds[1], theta_step)
 
@@ -74,18 +76,17 @@ def hough_planes(points, threshold=None, fi_step=1, fi_bounds=[0,360], theta_ste
         accum[fi_idxes, theta_idxes, dists] += 1
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    if threshold is not None:
-        points_best = []
-        for i in range(len(fis)):
-            for j in range(len(thetas)):
-                for k in range(depth_grads):
-                    v = accum[i, j, k]
-                    if v >= threshold:
-                        points_best.append([i, j, k, v])
-        points_best = np.array(points_best)
-        if len(points_best) == 0:
-            print('Failed to find hough planes: all points below threshold')
-            return None, None
+    points_best = []
+    for i in range(len(fis)):
+        for j in range(len(thetas)):
+            for k in range(depth_start, depth_grads):
+                v = accum[i, j, k]
+                if v >= threshold:
+                    points_best.append([i, j, k, v])
+    points_best = np.array(points_best)
+    if len(points_best) == 0:
+        print('Failed to find hough planes: all points below threshold')
+        return None, None
 
 
     pcd = o3d.geometry.PointCloud()

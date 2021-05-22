@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import open3d as o3d
 from hough_plane_transform import hough_planes
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~START VIZUALIZATION~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -90,6 +91,45 @@ def show_points(points):
             )
         )
     ])
+    fig.update_layout(
+        margin=dict(l=20, r=20, t=20, b=20),
+        height=800,
+        paper_bgcolor="LightSteelBlue",
+    )
+    iplot(fig)
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+def show_clusters(clusters):
+    data = [
+        go.Scatter3d(
+            x=[0],
+            y=[0],
+            z=[0],
+            mode='markers',
+            marker=dict(
+                size=10,
+                color=(255, 0, 0)
+            )
+        )
+    ]
+    for k,v in clusters.items():
+        random_color = (np.random.random(3)*255).astype(np.uint8)
+        color_str = f'rgb({random_color[0]},{random_color[1]},{random_color[2]})'
+        print('random_color', random_color, color_str)
+        data.append(
+            go.Scatter3d(
+                x=v[:, 0],
+                y=v[:, 1],
+                z=v[:, 2],
+                mode='markers',
+                marker=dict(
+                    size=2,
+                    color=color_str,
+                )
+            )
+        )
+
+    fig = go.Figure(data=data)
     fig.update_layout(
         margin=dict(l=20, r=20, t=20, b=20),
         height=800,
@@ -233,7 +273,7 @@ def find_train_wall(points, is_plotting=False):
         points, 500,
         fi_step=0.5, theta_step=0.5,
         fi_bounds=[80, 100], theta_bounds=[80, 100],
-        depth_grads=200,
+        depth_grads=200, depth_start=3,
     )
     if points_plane is None:
         return None
@@ -272,6 +312,8 @@ def vec_len(vec):
 
 FLOOR_TRIM_DIST_M = 0.1
 DOOR_ZONE_WIDTH_M = 0.05
+DOOR_STEP_M = 0.1
+DOOR_OPEN_THRESHOLD = 40
 
 def clusterize(points, is_plotting=False):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~find floor plane. remove floor points~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -305,19 +347,106 @@ def clusterize(points, is_plotting=False):
     points_proj = projection(points, tw_vector)
     tw_vec_len = vec_len(tw_vector)
 
-    door_mask = (points_proj > (tw_vec_len - DOOR_ZONE_WIDTH_M)) & (points_proj < (tw_vec_len + DOOR_ZONE_WIDTH_M))
+    door_mask = (points_proj > (tw_vec_len - DOOR_ZONE_WIDTH_M)) * (points_proj < (tw_vec_len + DOOR_ZONE_WIDTH_M))
     points_door = points[door_mask]
+    points_proj_door = points_proj[door_mask]
 
     #~~~~~~~~
-    points_mask = points_proj < (pf_vec_len + DOOR_ZONE_WIDTH_M)
+    points_mask = points_proj < (tw_vec_len - DOOR_ZONE_WIDTH_M)
     points_masked = points[points_mask]
 
     remove_num = len(points) - len(points_masked)
     print(f'Removed {remove_num} points beyond the door')
     points = points_masked
 
+    # door open percent
+    if is_plotting:
+        show_points(points_door)
+
+    tw_vector_norm = vec_norm(tw_vector)
+    proj_vectors = np.zeros((len(points_proj_door), 3))
+    for i in range(3):
+        proj_vectors[:, i] = points_proj_door * tw_vector_norm[i]
+    door_points_zero_plane = points_door - proj_vectors
+    if is_plotting:
+        show_points(door_points_zero_plane)
+
+    proj_axis = np.cross(tw_vector, pf_vector)
+    proj_axis2 = np.cross(tw_vector, proj_axis)
+    proj_axis2_norm = vec_norm(proj_axis2)
+    door_points_zero_plane_proj = projection(door_points_zero_plane, proj_axis2_norm)
+    print('proj_axis', proj_axis)
+    print('proj_axis2', proj_axis2)
+
+    proj_vectors = np.zeros((len(door_points_zero_plane), 3))
+    for i in range(3):
+        proj_vectors[:, i] = door_points_zero_plane_proj * proj_axis2_norm[i]
+    door_points_zero_line = door_points_zero_plane - proj_vectors
+    if is_plotting:
+        show_points(door_points_zero_line)
+
+    dp = projection(door_points_zero_plane, proj_axis)
+    dp.sort()
+    min_val = np.min(dp)
+    max_val = np.max(dp)
+    bin_bounds = np.arange(min_val, max_val, DOOR_STEP_M)
+    bins = []
+    for i in range(len(bin_bounds) - 1):
+        bin_count = np.sum(
+            (dp >= bin_bounds[i]) * (dp < bin_bounds[i + 1])
+        )
+        bins.append(bin_count)
+    bins = np.array(bins)
+    bins_is_open = bins < DOOR_OPEN_THRESHOLD
+    print('bins', bins)
+    print('bins_is_open', bins_is_open)
+
+    max_open_sequence = 0
+    this_open_sequence = 0
+    for i in range(len(bins_is_open)):
+        bin_is_open = bins_is_open[i]
+        if bin_is_open:
+            this_open_sequence += 1
+        else:
+            max_open_sequence = max(max_open_sequence, this_open_sequence)
+            this_open_sequence = 0
+    max_open_sequence = max(max_open_sequence, this_open_sequence)
+    door_open_width = max_open_sequence * DOOR_STEP_M
+    print('door_open_width', door_open_width)
+
     # detect blobs from remaining points
     if is_plotting:
         show_points(points)
-        show_points(points_door)
+
+    pcd = o3d.geometry.PointCloud()
+    pcd.points = o3d.utility.Vector3dVector(points[:, :3])
+    pcd_filtered, _ind = pcd.remove_statistical_outlier(nb_neighbors=20, std_ratio=0.25)
+    print('pcd_filtered', pcd, pcd_filtered)
+    cluster_idxes = pcd_filtered.cluster_dbscan(eps=0.2, min_points=1)
+    points = np.asarray(pcd_filtered.points)
+
+    clusters = {}
+    for i in range(len(cluster_idxes)):
+        idx = cluster_idxes[i]
+        if not idx in clusters:
+            clusters[idx] = []
+        clusters[idx].append(points[i])
+    print('clusters.keys()', clusters.keys())
+
+    keys_to_del = []
+    for k,v in clusters.items():
+        if len(v) < 20:
+            keys_to_del.append(k)
+            continue
+        clusters[k] = np.array(clusters[k])
+    for k in keys_to_del:
+        del clusters[k]
+
+    print('clusters.keys()', clusters.keys())
+
+    # if is_plotting:
+    show_clusters(clusters)
+
+
+
 
