@@ -48,7 +48,7 @@ View scene with detected objects
 ./json_mapped.py -i RES/example_clouds/10.pcd -p out.json
 ```
 
-#VoiceAlert
+# VoiceAlert
 
 Tested on Windows 10 64x
 
