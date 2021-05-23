@@ -1,3 +1,6 @@
+#!/bin/sh
+"exec" "`dirname $0`/venv/bin/python" "$0" "$@"
+
 #ГОЛУБОЕ-ЧЕЛОВЕК
 #КРАСНОЕ-КОНЕЧНОСТЬ
 #ЗЕЛЕНОЕ-ДРУГОЕ
@@ -24,6 +27,8 @@ def text_3d(text, pos, direction=None, degree=0.0, font='arial.ttf', font_size=1
     """
     if direction is None:
         direction = (0., 0., 1.)
+    if os.name == 'posix':
+        font = "/usr/share/fonts/truetype/freefont/FreeMono.ttf"
     font_obj = ImageFont.truetype(font, font_size * density)
     font_dim = font_obj.getsize(text)
 
