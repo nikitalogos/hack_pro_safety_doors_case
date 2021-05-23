@@ -111,7 +111,7 @@ def hough_planes(points, threshold,
         weights = cluster[:, 3]
         for i in range(3):
             coords[:, i] *= weights
-        weight = np.average(weights)
+        weight = len(weights)
 
         coord = np.sum(coords, axis=0) / np.sum(weights)
         print('coord', coord, 'weight', weight)

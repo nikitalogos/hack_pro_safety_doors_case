@@ -244,8 +244,8 @@ def visualize_plane(points, vectors):
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~END VIZUALIZATION~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 def find_platform_floor(points, is_plotting=False):
     points_plane, points_best = hough_planes(
-        points, 500,
-        fi_step=0.5, theta_step=0.5,
+        points, 1000,
+        fi_step=2, theta_step=0.5,
         theta_bounds=[-10, 10],
         depth_grads=200,
     )
@@ -265,14 +265,15 @@ def find_platform_floor(points, is_plotting=False):
         show_points_plane(points, points_plane)
 
     if len(points_plane) > 0:
-        point_plane = np.average(points_plane, axis=0)
+        best_idx = np.argmax(points_plane[:,3])
+        point_plane = points_plane[best_idx]
         return point_plane
     else:
         return None
 
 def find_train_wall(points, is_plotting=False):
     points_plane, points_best = hough_planes(
-        points, 500,
+        points, 1000,
         fi_step=0.5, theta_step=0.5,
         fi_bounds=[80, 100], theta_bounds=[80, 95],
         depth_grads=200, depth_start=3,
@@ -293,7 +294,8 @@ def find_train_wall(points, is_plotting=False):
         show_points_plane(points, points_plane)
 
     if len(points_plane) > 0:
-        point_plane = np.average(points_plane, axis=0)
+        best_idx = np.argmax(points_plane[:,3])
+        point_plane = points_plane[best_idx]
         return point_plane
     else:
         return None
