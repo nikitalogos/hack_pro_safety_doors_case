@@ -39,7 +39,7 @@ if __name__ == '__main__':
     pcd.points = o3d.utility.Vector3dVector(points_arr)
     pcd.colors = o3d.utility.Vector3dVector(colors_arr[:, :3])
 
-    pcd = pcd.voxel_down_sample(voxel_size=0.04)
+    pcd = pcd.voxel_down_sample(voxel_size=0.03)
 
     points = np.asarray(pcd.points)
     print(f'Applied filtering. {len(points)} points remaining')

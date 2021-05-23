@@ -462,7 +462,7 @@ def clusterize(points, is_plotting=False) -> object or None:
         if is_plotting:
             show_points_2d(door_points_2d)
 
-        image = points_to_image(door_points_2d, height=DOOR_PX_PER_M*2, point_size=8, is_imshow=True)
+        image = points_to_image(door_points_2d, height=DOOR_PX_PER_M*2, point_size=8, is_imshow=False)
         h,w = image.shape
         line = np.average(image, axis=0)
 
