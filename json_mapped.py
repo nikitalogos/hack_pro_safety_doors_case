@@ -408,6 +408,10 @@ vis = o3d.visualization.Visualizer()
     #считываем JSON
     #ТУТ МЫ СЧИТЫВАЕМ JSON ФАЙЛ ПОЛНОСТЬЮ
 with open( file_json, "r", encoding='utf-8') as fel:
+     limb_id=' '
+     human_id=' '
+     wear_id=' '
+     other_id=' '
      text = json.load(fel)
      if args["choose_json"]==0:
         for obj in text["objects"]:
