@@ -31,13 +31,12 @@ def text_3d(text, pos, direction=None, degree=0.0, font='arial.ttf', font_size=1
     font_obj = ImageFont.truetype(font, font_size * density)
     font_dim = font_obj.getsize(text)
 
+    
     img = Image.new('RGB', font_dim, color=(255, 255, 255))
-    if text=='door is closed':
+    if text=='Train can not move':
         img = Image.new('RGB', font_dim, color=(255, 0, 0))
-    if text == 'door is open':
+    if text == 'Train can move':
         img = Image.new('RGB', font_dim, color=(0, 255, 0))
-    if text == 'door is semi':
-        img = Image.new('RGB', font_dim, color=(255, 165, 0))
     draw = ImageDraw.Draw(img)
     draw.text((0, 0), text, font=font_obj, fill=(0, 0, 0))
     img = np.asarray(img)
@@ -46,7 +45,7 @@ def text_3d(text, pos, direction=None, degree=0.0, font='arial.ttf', font_size=1
 
     pcd = o3d.geometry.PointCloud()
     pcd.colors = o3d.utility.Vector3dVector(img[img_mask, :].astype(float) / 255.0)
-    pcd.points = o3d.utility.Vector3dVector(indices / 1000 / density)
+    pcd.points = o3d.utility.Vector3dVector(indices / 800 / density)
 
     raxis = np.cross([0., 0.5, 1.0], direction)
     if np.linalg.norm(raxis) < 1e-6:
@@ -438,14 +437,19 @@ with open( file_json, "r", encoding='utf-8') as fel:
         boxes=get_box1(text)
         #mybox = my_rect()
         READY=[]
+
+        lis=''
         if text['events']==[]:
-            event=' '
+            event='unknown'
         else:
-            event=text['events'][0]
+
+            for event in text['events']:
+                lis=lis+'/'+event
+
 
         is_can_move=text['is_can_move']
         if is_can_move==False:
-            chat='Train cannot move'
+            chat='Train can not move'
         else:
             chat='Train can move'
         door_open_proc=str(text['door_open_percent'])
@@ -455,9 +459,16 @@ with open( file_json, "r", encoding='utf-8') as fel:
         chessboard_coord = o3d.geometry.TriangleMesh.create_coordinate_frame(
             size=0.5, origin=[0, 0, 0])
        # pcd_1 = text_3d(event, pos=[-1, 0, 0], font_size=350, density=1)
-        pcd_2 = text_3d(chat, pos=[-1, 0, 0.4], font_size=350, density=1)
-        pcd_3 = text_3d('the door is '+door_open_proc+'% open', pos=[-1, 0, 0.8], font_size=350, density=1)
-        pcd_4 = text_3d('door is '+op, pos=[-1, 0, 1.2], font_size=350, density=1)
+        pcd_1 = text_3d('Door state: ' + op, pos=[-2, 0, 0], font_size=400, density=1)
+        if op!='unknown':
+            pcd_2 = text_3d('The door is ' + door_open_proc + '% open', pos=[-2, 0, 0.5], font_size=400, density=1)
+            pcd_4 = text_3d(chat, pos=[-2, 0, 1.5], font_size=400, density=1)
+        else:
+            pcd_2 = text_3d(' ', pos=[-2, 0, 0.5], font_size=400, density=1)
+            pcd_4 = text_3d(' ', pos=[-2, 0, 1.5], font_size=400, density=1)
+        pcd_3 = text_3d('Events: '+lis, pos=[-2, 0, 1.0], font_size=400, density=1)
+
+
         #pcd_20 = text_3d('Test-20mm', pos=[0, 0, 0], font_size=20, density=2)
         #ТУТ МЫ СЧИТЫВАЕМ ФАЙЛ ОБЛАКА ТОЧЕК
         pcd = o3d.io.read_point_cloud (files)
@@ -468,6 +479,7 @@ with open( file_json, "r", encoding='utf-8') as fel:
             READY.append(boxes[j])
 
        # READY.append(pcd_1)
+        READY.append(pcd_1)
         READY.append(pcd_2)
         READY.append(pcd_3)
         READY.append(pcd_4)
@@ -475,4 +487,3 @@ with open( file_json, "r", encoding='utf-8') as fel:
                                               width=1024,
                                               height=980)
         print(files)
-

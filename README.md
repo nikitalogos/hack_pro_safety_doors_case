@@ -48,4 +48,30 @@ View scene with detected objects
 ./json_mapped.py -i RES/example_clouds/10.pcd -p out.json
 ```
 
+# VoiceAlert
 
+Tested on Windows 10 64x
+
+## Install requirements:
+* SpeechRecognition
+```bash
+   pip install SpeachRecognition 
+```
+* PyAudio for Python 3.7 and Windows 64x
+```bash
+   pip install PyAudio-0.2.11-cp37-cp37m-win_amd64.whl
+```
+* Scikit-learn 0.24.2
+```bash
+   pip install -U scikit-learn
+```
+# Usage
+Set audio source.
+We can get all possible sound sources from the list speech_recognition.Microphone()
+```bash
+   import speech_recognition as sr
+   ...
+    with sr.Microphone(device_index=1) as source:
+    ...
+```
+device_index specified the device from which the sound will be read
