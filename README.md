@@ -4,9 +4,9 @@ Program for detecting people jammed by doors in trains.
 
 # Installation instruction
 
-#Install
+# Install
 
-##Setup python environment
+## Setup python environment
 
 * Install python3.7
 
@@ -36,6 +36,16 @@ source venv/bin/activate
 venv/bin/pip install --upgrade pip && venv/bin/pip install -r requirements.txt
 ```
 
+# Usage
 
+Analyze scene from .pcd file and generate output json
+```bash
+./scene_analyzer.py -i RES/example_clouds/10.pcd -o out.json
+```
+
+View scene with detected objects
+```bash
+./json_mapped.py -i RES/example_clouds/10.pcd -p out.json
+```
 
 

@@ -8,7 +8,7 @@ import json
 from pprint import PrettyPrinter
 pp = PrettyPrinter(indent=4)
 
-from clusterization import clusterize
+from algo.clusterization import clusterize
 
 if __name__ == '__main__':
     ap = ArgumentParser()
