@@ -52,7 +52,7 @@ View scene with detected objects
 
 Tested on Windows 10 64x
 
-* Install requirements:
+## Install requirements:
 * SpeechRecognition
 ```bash
    pip install SpeachRecognition 
