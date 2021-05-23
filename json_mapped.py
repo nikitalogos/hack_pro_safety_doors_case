@@ -1,5 +1,3 @@
-#!/bin/sh
-"exec" "`dirname $0`/venv/bin/python" "$0" "$@"
 #ГОЛУБОЕ-ЧЕЛОВЕК
 #КРАСНОЕ-КОНЕЧНОСТЬ
 #ЗЕЛЕНОЕ-ДРУГОЕ
@@ -59,6 +57,161 @@ def text_3d(text, pos, direction=None, degree=0.0, font='arial.ttf', font_size=1
     pcd.transform(trans)
     return pcd
 
+def get_box1(text):
+    boxes=[]
+    for txt in text["figures"]:
+        boxes = []
+        # для всех полей с корнем figure
+        for txt in text["figures"]:
+            init_cord = []
+            rot = []
+            disp = []
+            # если ключь совпадает с кючем для человека
+            if txt["object"] == 'limb':
+                # записываем координаты начальной точки
+                init_cord.append(txt["geometry"]["position"]["x"])
+                init_cord.append(txt["geometry"]["position"]["y"])
+                init_cord.append(txt["geometry"]["position"]["z"])
+                # записываем ротацию
+                rot.append(txt["geometry"]["rotation"]["x"])
+                rot.append(txt["geometry"]["rotation"]["y"])
+                rot.append(txt["geometry"]["rotation"]["z"])
+                # записываем переещения
+                disp.append(txt["geometry"]["dimensions"]["x"])
+                disp.append(txt["geometry"]["dimensions"]["y"])
+                disp.append(txt["geometry"]["dimensions"]["z"])
+                # координаты углов квадрата
+                points = [[init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2]],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2]],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2]],
+                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2]],
+
+                          [init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2] - disp[2]],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]],
+                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2] - disp[2]],
+                          ]
+                lines = [[0, 1], [0, 3], [1, 2], [2, 3],
+                         [4, 5], [4, 7], [5, 6], [6, 7],
+                         [0, 4], [1, 5], [2, 6], [3, 7]]
+
+                colors = [[1, 0, 0] for i in range(len(lines))]
+                line_set = o3d.geometry.LineSet()
+                line_set.points = o3d.utility.Vector3dVector(points)
+                line_set.lines = o3d.utility.Vector2iVector(lines)
+                line_set.colors = o3d.utility.Vector3dVector(colors)
+                R = line_set.get_rotation_matrix_from_xyz((rot[0], rot[1], rot[2]))
+                line_set = line_set.rotate(R, center=(init_cord[0], init_cord[1], init_cord[2]))
+                boxes.append(line_set)
+            if txt["object"] == 'wear':
+                # записываем координаты начальной точки
+                init_cord.append(txt["geometry"]["position"]["x"])
+                init_cord.append(txt["geometry"]["position"]["y"])
+                init_cord.append(txt["geometry"]["position"]["z"])
+                # записываем ротацию
+                rot.append(txt["geometry"]["rotation"]["x"])
+                rot.append(txt["geometry"]["rotation"]["y"])
+                rot.append(txt["geometry"]["rotation"]["z"])
+                # записываем переещения
+                disp.append(txt["geometry"]["dimensions"]["x"])
+                disp.append(txt["geometry"]["dimensions"]["y"])
+                disp.append(txt["geometry"]["dimensions"]["z"])
+                # координаты углов квадрата
+                points = [[init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2]],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2]],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2]],
+                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2]],
+
+                          [init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2] - disp[2]],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]],
+                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2] - disp[2]],
+                          ]
+                lines = [[0, 1], [0, 3], [1, 2], [2, 3],
+                         [4, 5], [4, 7], [5, 6], [6, 7],
+                         [0, 4], [1, 5], [2, 6], [3, 7]]
+
+                colors = [[0, 0, 0] for i in range(len(lines))]
+                line_set = o3d.geometry.LineSet()
+                line_set.points = o3d.utility.Vector3dVector(points)
+                line_set.lines = o3d.utility.Vector2iVector(lines)
+                line_set.colors = o3d.utility.Vector3dVector(colors)
+                R = line_set.get_rotation_matrix_from_xyz((rot[0], rot[1], rot[2]))
+                line_set = line_set.rotate(R, center=(init_cord[0], init_cord[1], init_cord[2]))
+                boxes.append(line_set)
+            if txt["object"] == 'human':
+                # записываем координаты начальной точки
+                init_cord.append(txt["geometry"]["position"]["x"])
+                init_cord.append(txt["geometry"]["position"]["y"])
+                init_cord.append(txt["geometry"]["position"]["z"])
+                # записываем ротацию
+                rot.append(txt["geometry"]["rotation"]["x"])
+                rot.append(txt["geometry"]["rotation"]["y"])
+                rot.append(txt["geometry"]["rotation"]["z"])
+                # записываем переещения
+                disp.append(txt["geometry"]["dimensions"]["x"])
+                disp.append(txt["geometry"]["dimensions"]["y"])
+                disp.append(txt["geometry"]["dimensions"]["z"])
+                # координаты углов квадрата
+                points = [[init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2]],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2]],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2]],
+                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2]],
+
+                          [init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2] - disp[2]],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]],
+                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2] - disp[2]],
+                          ]
+                lines = [[0, 1], [0, 3], [1, 2], [2, 3],
+                         [4, 5], [4, 7], [5, 6], [6, 7],
+                         [0, 4], [1, 5], [2, 6], [3, 7]]
+
+                colors = [[0, 0, 1] for i in range(len(lines))]
+                line_set = o3d.geometry.LineSet()
+                line_set.points = o3d.utility.Vector3dVector(points)
+                line_set.lines = o3d.utility.Vector2iVector(lines)
+                line_set.colors = o3d.utility.Vector3dVector(colors)
+                R = line_set.get_rotation_matrix_from_xyz((rot[0], rot[1], rot[2]))
+                line_set = line_set.rotate(R, center=(init_cord[0], init_cord[1], init_cord[2]))
+                boxes.append(line_set)
+            if txt["object"] == 'other':
+                # записываем координаты начальной точки
+                init_cord.append(txt["geometry"]["position"]["x"])
+                init_cord.append(txt["geometry"]["position"]["y"])
+                init_cord.append(txt["geometry"]["position"]["z"])
+                # записываем ротацию
+                rot.append(txt["geometry"]["rotation"]["x"])
+                rot.append(txt["geometry"]["rotation"]["y"])
+                rot.append(txt["geometry"]["rotation"]["z"])
+                # записываем переещения
+                disp.append(txt["geometry"]["dimensions"]["x"])
+                disp.append(txt["geometry"]["dimensions"]["y"])
+                disp.append(txt["geometry"]["dimensions"]["z"])
+                # координаты углов квадрата
+                points = [[init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2]],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2]],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2]],
+                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2]],
+
+                          [init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2] - disp[2]],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]],
+                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2] - disp[2]],
+                          ]
+                lines = [[0, 1], [0, 3], [1, 2], [2, 3],
+                         [4, 5], [4, 7], [5, 6], [6, 7],
+                         [0, 4], [1, 5], [2, 6], [3, 7]]
+
+                colors = [[0, 1, 0] for i in range(len(lines))]
+                line_set = o3d.geometry.LineSet()
+                line_set.points = o3d.utility.Vector3dVector(points)
+                line_set.lines = o3d.utility.Vector2iVector(lines)
+                line_set.colors = o3d.utility.Vector3dVector(colors)
+                R = line_set.get_rotation_matrix_from_xyz((rot[0], rot[1], rot[2]))
+                line_set = line_set.rotate(R, center=(init_cord[0], init_cord[1], init_cord[2]))
+                boxes.append(line_set)
+        return boxes
 
 def get_box(text):
     boxes=[]
@@ -272,7 +425,7 @@ vis = o3d.visualization.Visualizer()
     #ТУТ МЫ СЧИТЫВАЕМ JSON ФАЙЛ ПОЛНОСТЬЮ
 with open( file_json, "r", encoding='utf-8') as fel:
         text = json.load(fel)
-        boxes=get_box(text)
+        boxes=get_box1(text)
         #mybox = my_rect()
         READY=[]
         chessboard_coord = o3d.geometry.TriangleMesh.create_coordinate_frame(
