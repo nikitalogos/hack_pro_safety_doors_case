@@ -485,12 +485,13 @@ def clusterize(points, is_plotting=False) -> object or None:
         scene.add_object(obj)
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end detect blobs from remaining points~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~start compute events~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    for obj in scene.objects:
-        vertices = obj.get_box_vertices()
-        vertices_proj = projection(vertices, tw_vector_norm)
-        if np.sum(vertices_proj > tw_vec_len) > 0:
-            print('Detected object inside door!')
-            scene.add_event(SceneEvents.OBJECT_BETWEEN_DOORS)
+    if is_train_wall_found:
+        for obj in scene.objects:
+            vertices = obj.get_box_vertices()
+            vertices_proj = projection(vertices, tw_vector_norm)
+            if np.sum(vertices_proj > tw_vec_len) > 0:
+                print('Detected object inside door!')
+                scene.add_event(SceneEvents.OBJECT_BETWEEN_DOORS)
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end compute events~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     return scene
