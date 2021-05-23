@@ -26,12 +26,16 @@ def text_3d(text, pos, direction=None, degree=0.0, font='arial.ttf', font_size=1
     """
     if direction is None:
         direction = (0., 0., 1.)
-    if os.name == 'posix':
-        font = "/usr/share/fonts/truetype/freefont/FreeMono.ttf"
     font_obj = ImageFont.truetype(font, font_size * density)
     font_dim = font_obj.getsize(text)
 
     img = Image.new('RGB', font_dim, color=(255, 255, 255))
+    if text=='door is closed':
+        img = Image.new('RGB', font_dim, color=(255, 0, 0))
+    if text == 'door is open':
+        img = Image.new('RGB', font_dim, color=(0, 255, 0))
+    if text == 'door is semi':
+        img = Image.new('RGB', font_dim, color=(255, 165, 0))
     draw = ImageDraw.Draw(img)
     draw.text((0, 0), text, font=font_obj, fill=(0, 0, 0))
     img = np.asarray(img)
@@ -85,15 +89,15 @@ def get_box1(text):
                 disp.append(txt["geometry"]["dimensions"]["y"])
                 disp.append(txt["geometry"]["dimensions"]["z"])
                 # координаты углов квадрата
-                points = [[init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2]],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2]],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2]],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2]],
+                points = [[init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
 
-                          [init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2] - disp[2]],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2] - disp[2]],
+                          [init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
                           ]
                 lines = [[0, 1], [0, 3], [1, 2], [2, 3],
                          [4, 5], [4, 7], [5, 6], [6, 7],
@@ -121,15 +125,15 @@ def get_box1(text):
                 disp.append(txt["geometry"]["dimensions"]["y"])
                 disp.append(txt["geometry"]["dimensions"]["z"])
                 # координаты углов квадрата
-                points = [[init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2]],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2]],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2]],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2]],
+                points = [[init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
 
-                          [init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2] - disp[2]],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2] - disp[2]],
+                          [init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
                           ]
                 lines = [[0, 1], [0, 3], [1, 2], [2, 3],
                          [4, 5], [4, 7], [5, 6], [6, 7],
@@ -157,15 +161,15 @@ def get_box1(text):
                 disp.append(txt["geometry"]["dimensions"]["y"])
                 disp.append(txt["geometry"]["dimensions"]["z"])
                 # координаты углов квадрата
-                points = [[init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2]],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2]],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2]],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2]],
+                points = [[init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
 
-                          [init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2] - disp[2]],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2] - disp[2]],
+                          [init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
                           ]
                 lines = [[0, 1], [0, 3], [1, 2], [2, 3],
                          [4, 5], [4, 7], [5, 6], [6, 7],
@@ -193,15 +197,15 @@ def get_box1(text):
                 disp.append(txt["geometry"]["dimensions"]["y"])
                 disp.append(txt["geometry"]["dimensions"]["z"])
                 # координаты углов квадрата
-                points = [[init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2]],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2]],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2]],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2]],
+                points = [[init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
 
-                          [init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2] - disp[2]],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2] - disp[2]],
+                          [init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
                           ]
                 lines = [[0, 1], [0, 3], [1, 2], [2, 3],
                          [4, 5], [4, 7], [5, 6], [6, 7],
@@ -418,7 +422,7 @@ wear_id="f8b0fcbf2fd140caa49049729ad18072"
 other_id="dc58658c7ffd4802a1dd62258b4ad985"
 limb_id="e7eb42dd5e0544eb9f667a3915a64700"
 
-FOR= get_o3d_FOR()
+#FOR= get_o3d_FOR()
 
 boxes=[]
 vis = o3d.visualization.Visualizer()
@@ -432,21 +436,41 @@ with open( file_json, "r", encoding='utf-8') as fel:
         boxes=get_box1(text)
         #mybox = my_rect()
         READY=[]
+        if text['events']==[]:
+            event=' '
+        else:
+            event=text['events'][0]
+
+        is_can_move=text['is_can_move']
+        if is_can_move==False:
+            chat='Train cannot move'
+        else:
+            chat='Train can move'
+        door_open_proc=str(text['door_open_percent'])
+        op=text['door']
+
+
         chessboard_coord = o3d.geometry.TriangleMesh.create_coordinate_frame(
-            size=0.02, origin=[0, 0, 0])
-        pcd_10 = text_3d('Test-10mm', pos=[-0.5, 0, 2], font_size=300, density=2)
+            size=0.5, origin=[0, 0, 0])
+       # pcd_1 = text_3d(event, pos=[-1, 0, 0], font_size=350, density=1)
+        pcd_2 = text_3d(chat, pos=[-1, 0, 0.4], font_size=350, density=1)
+        pcd_3 = text_3d('the door is '+door_open_proc+'% open', pos=[-1, 0, 0.8], font_size=350, density=1)
+        pcd_4 = text_3d('door is '+op, pos=[-1, 0, 1.2], font_size=350, density=1)
         #pcd_20 = text_3d('Test-20mm', pos=[0, 0, 0], font_size=20, density=2)
         #ТУТ МЫ СЧИТЫВАЕМ ФАЙЛ ОБЛАКА ТОЧЕК
         pcd = o3d.io.read_point_cloud (files)
-        READY.append(FOR)
+       # READY.append(FOR)
         READY.append(pcd)
         #READY.append(mybox)
         for j in range(len(boxes)):
             READY.append(boxes[j])
-            print(type(boxes[j]))
-        READY.append(pcd_10)
-        print(type(pcd_10))
+
+       # READY.append(pcd_1)
+        READY.append(pcd_2)
+        READY.append(pcd_3)
+        READY.append(pcd_4)
         o3d.visualization.draw_geometries(READY,
                                               width=1024,
                                               height=980)
         print(files)
+
