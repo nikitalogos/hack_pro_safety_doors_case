@@ -461,14 +461,29 @@ def clusterize(points, is_plotting=False) -> object or None:
     if is_plotting:
         show_clusters(clusters)
 
-    for cluster in clusters:
+    for k,v in clusters.items():
+        pcd = o3d.geometry.PointCloud()
+        pcd.points = o3d.utility.Vector3dVector(v[:, :3])
+        mins = pcd.get_min_bound()
+        maxes = pcd.get_max_bound()
+
+        position = (mins + maxes) / 2
+        dimensions = maxes - mins
+
         obj = SceneObject(
             object_type=ObjectTypes.HUMAN,
+            position=position,
+            dimensions=dimensions,
         )
         scene.add_object(obj)
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end detect blobs from remaining points~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~start compute events~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # pass
+    for obj in scene.objects:
+        vertices = obj.get_box_vertices()
+        vertices_proj = projection(vertices, tw_vector_norm)
+        if np.sum(vertices_proj > tw_vec_len) > 0:
+            print('Detected object inside door!')
+            scene.add_event(SceneEvents.OBJECT_BETWEEN_DOORS)
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~end compute events~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     return scene

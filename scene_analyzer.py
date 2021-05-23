@@ -14,7 +14,9 @@ if __name__ == '__main__':
     ap = ArgumentParser()
     ap.add_argument('-i', '--input', type=str, required=True, help="Input .pcd file")
     ap.add_argument('-o', '--output', type=str, help='Output json file')
+    ap.add_argument('-p', '--is_plotting', action="store_true", help='Show debug plots')
     args = vars(ap.parse_args())
+    print('args', args)
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     points = []
@@ -42,7 +44,7 @@ if __name__ == '__main__':
     points = np.asarray(pcd.points)
     print(f'Applied filtering. {len(points)} points remaining')
 
-    scene = clusterize(points, is_plotting=False)
+    scene = clusterize(points, is_plotting=args['is_plotting'])
     if scene is None:
         print('SCENE ANALYSIS FAILED!')
         exit(1)
