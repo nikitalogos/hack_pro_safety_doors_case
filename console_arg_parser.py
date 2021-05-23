@@ -1,6 +1,5 @@
 #!/bin/sh
 "exec" "`dirname $0`/venv/bin/python" "$0" "$@"
-
 #ГОЛУБОЕ-ЧЕЛОВЕК
 #КРАСНОЕ-КОНЕЧНОСТЬ
 #ЗЕЛЕНОЕ-ДРУГОЕ
@@ -10,6 +9,7 @@ import open3d as o3d
 import json
 import numpy as np
 import os
+from argparse import ArgumentParser
 from PIL import Image, ImageFont, ImageDraw
 from pyquaternion import Quaternion
 
@@ -43,8 +43,8 @@ def text_3d(text, pos, direction=None, degree=0.0, font='arial.ttf', font_size=1
     raxis = np.cross([0., 0.5, 1.0], direction)
     if np.linalg.norm(raxis) < 1e-6:
         raxis = (0.0, 0.5, -1.0)
-    trans = (Quaternion(axis=raxis, radians=np.arccos(direction[2])) *
-             Quaternion(axis=direction, degrees=degree)).transformation_matrix
+   # trans = (Quaternion(axis=raxis, radians=np.arccos(direction[2])) *
+         #   Quaternion(axis=direction, degrees=degree)).transformation_matrix
     #print(trans)
     trans=[[1.,0.,0.,0.],
             [0.,0.,1.,0.],
@@ -244,13 +244,17 @@ def my_rect():
     line_set.colors = o3d.utility.Vector3dVector(colors)
     return line_set
 
+ap = ArgumentParser()
+ap.add_argument('-i', '--input_pcd', type=str, required=True, help="Input .pcd file")
+ap.add_argument('-p', '--input_json', type=str, required=True, help="Input .json file")
+args = vars(ap.parse_args())
 
-
-directory1="C:/Users/Дмитрий/PycharmProjects/parseJSON/points"
-files = os.listdir(directory1)
+directory="C:/Users/Дмитрий/PycharmProjects/parseJSON"
+files = args["input_pcd"]
 print(files)
-directory2="C:/Users/Дмитрий/PycharmProjects/parseJSON/clouds_tof_ann"
-file_json = os.listdir(directory2)
+#directory2="C:/Users/Дмитрий/PycharmProjects/parseJSON/clouds_tof_ann"
+file_json = args["input_json"]
+print(file_json)
 
 human_id="6bc1d79329bd444c8fb0717e408dd48c"
 wear_id="f8b0fcbf2fd140caa49049729ad18072"
@@ -263,10 +267,10 @@ boxes=[]
 vis = o3d.visualization.Visualizer()
 
 #проходим по каждому файлу
-for i in range(len(files)):
+
     #считываем JSON
     #ТУТ МЫ СЧИТЫВАЕМ JSON ФАЙЛ ПОЛНОСТЬЮ
-    with open(os.path.join(directory2, file_json[i]), "r", encoding='utf-8') as fel:
+with open( file_json, "r", encoding='utf-8') as fel:
         text = json.load(fel)
         boxes=get_box(text)
         #mybox = my_rect()
@@ -276,7 +280,7 @@ for i in range(len(files)):
         pcd_10 = text_3d('Test-10mm', pos=[-0.5, 0, 2], font_size=300, density=2)
         #pcd_20 = text_3d('Test-20mm', pos=[0, 0, 0], font_size=20, density=2)
         #ТУТ МЫ СЧИТЫВАЕМ ФАЙЛ ОБЛАКА ТОЧЕК
-        pcd = o3d.io.read_point_cloud(os.path.join("points/", files[i]))
+        pcd = o3d.io.read_point_cloud (files)
         READY.append(FOR)
         READY.append(pcd)
         #READY.append(mybox)
@@ -288,4 +292,4 @@ for i in range(len(files)):
         o3d.visualization.draw_geometries(READY,
                                               width=1024,
                                               height=980)
-        print(files[i])
+        print(files)
