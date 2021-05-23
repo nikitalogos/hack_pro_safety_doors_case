@@ -89,15 +89,15 @@ def get_box1(text):
                 disp.append(txt["geometry"]["dimensions"]["y"])
                 disp.append(txt["geometry"]["dimensions"]["z"])
                 # координаты углов квадрата
-                points = [[init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
+                points = [[init_cord[0] - disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2]+ disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2]+ disp[2]/2],
 
-                          [init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2] - disp[2]/2],
                           ]
                 lines = [[0, 1], [0, 3], [1, 2], [2, 3],
                          [4, 5], [4, 7], [5, 6], [6, 7],
@@ -125,15 +125,15 @@ def get_box1(text):
                 disp.append(txt["geometry"]["dimensions"]["y"])
                 disp.append(txt["geometry"]["dimensions"]["z"])
                 # координаты углов квадрата
-                points = [[init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
+                points = [[init_cord[0] - disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2]+ disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2]+ disp[2]/2],
 
-                          [init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2] - disp[2]/2],
                           ]
                 lines = [[0, 1], [0, 3], [1, 2], [2, 3],
                          [4, 5], [4, 7], [5, 6], [6, 7],
@@ -161,15 +161,15 @@ def get_box1(text):
                 disp.append(txt["geometry"]["dimensions"]["y"])
                 disp.append(txt["geometry"]["dimensions"]["z"])
                 # координаты углов квадрата
-                points = [[init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
+                points = [[init_cord[0] - disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2]+ disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2]+ disp[2]/2],
 
-                          [init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2] - disp[2]/2],
                           ]
                 lines = [[0, 1], [0, 3], [1, 2], [2, 3],
                          [4, 5], [4, 7], [5, 6], [6, 7],
@@ -197,15 +197,15 @@ def get_box1(text):
                 disp.append(txt["geometry"]["dimensions"]["y"])
                 disp.append(txt["geometry"]["dimensions"]["z"])
                 # координаты углов квадрата
-                points = [[init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
+                points = [[init_cord[0] - disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2]+ disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2]+ disp[2]/2],
 
-                          [init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2] - disp[2]/2],
                           ]
                 lines = [[0, 1], [0, 3], [1, 2], [2, 3],
                          [4, 5], [4, 7], [5, 6], [6, 7],
@@ -243,15 +243,15 @@ def get_box(text):
                 disp.append(txt["geometry"]["dimensions"]["y"])
                 disp.append(txt["geometry"]["dimensions"]["z"])
                 # координаты углов квадрата
-                points = [[init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
+                points = [[init_cord[0] - disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2]+ disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2]+ disp[2]/2],
 
-                          [init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2] - disp[2]/2],
                           ]
                 lines = [[0, 1], [0, 3], [1, 2], [2, 3],
                          [4, 5], [4, 7], [5, 6], [6, 7],
@@ -279,15 +279,15 @@ def get_box(text):
                 disp.append(txt["geometry"]["dimensions"]["y"])
                 disp.append(txt["geometry"]["dimensions"]["z"])
                 # координаты углов квадрата
-                points = [[init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
+                points = [[init_cord[0] - disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2]+ disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2]+ disp[2]/2],
 
-                          [init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2] - disp[2]/2],
                           ]
                 lines = [[0, 1], [0, 3], [1, 2], [2, 3],
                          [4, 5], [4, 7], [5, 6], [6, 7],
@@ -315,15 +315,15 @@ def get_box(text):
                 disp.append(txt["geometry"]["dimensions"]["y"])
                 disp.append(txt["geometry"]["dimensions"]["z"])
                 # координаты углов квадрата
-                points = [[init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
+                points = [[init_cord[0] - disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2]+ disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2]+ disp[2]/2],
 
-                          [init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2] - disp[2]/2],
                           ]
                 lines = [[0, 1], [0, 3], [1, 2], [2, 3],
                          [4, 5], [4, 7], [5, 6], [6, 7],
@@ -351,15 +351,15 @@ def get_box(text):
                 disp.append(txt["geometry"]["dimensions"]["y"])
                 disp.append(txt["geometry"]["dimensions"]["z"])
                 # координаты углов квадрата
-                points = [[init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
+                points = [[init_cord[0] - disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2]+ disp[2]/2],
                           [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
                           [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2]+ disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2]+ disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2]+ disp[2]/2],
 
-                          [init_cord[0] - disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1], init_cord[2] - disp[2]/2],
-                          [init_cord[0] + disp[0] / 2, init_cord[1], init_cord[2] - disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] - disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1] + disp[1]/2, init_cord[2] - disp[2]/2],
+                          [init_cord[0] + disp[0] / 2, init_cord[1]- disp[1]/2, init_cord[2] - disp[2]/2],
                           ]
                 lines = [[0, 1], [0, 3], [1, 2], [2, 3],
                          [4, 5], [4, 7], [5, 6], [6, 7],
