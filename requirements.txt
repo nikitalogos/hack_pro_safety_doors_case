@@ -2,3 +2,4 @@ numpy
 open3d
 tqdm
 plotly
+pyquaternion
