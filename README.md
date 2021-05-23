@@ -67,7 +67,7 @@ Tested on Windows 10 64x
 ```
 # Usage
 Set audio source.
-We can get all possible sound sources from the list
+We can get all possible sound sources from the list speech_recognition.Microphone()
 ```bash
    import speech_recognition as sr
    ...
