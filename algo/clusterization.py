@@ -1,6 +1,8 @@
 import numpy as np
 import math
 import open3d as o3d
+import cv2
+import matplotlib.pyplot as plt
 from .hough_plane_transform import hough_planes
 
 from .scene_state import SceneState, SceneEvents, SceneObject, ObjectTypes
@@ -92,6 +94,24 @@ def show_points(points):
                 color=(255, 0, 0)
             )
         )
+    ])
+    fig.update_layout(
+        margin=dict(l=20, r=20, t=20, b=20),
+        height=800,
+        paper_bgcolor="LightSteelBlue",
+    )
+    iplot(fig)
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+def show_points_2d(points):
+    fig = go.Figure(data=[
+        go.Scatter(
+            x=points[:, 0],
+            y=points[:, 1],
+            mode='markers',
+            marker=dict(
+                size=5,
+            )
+        ),
     ])
     fig.update_layout(
         margin=dict(l=20, r=20, t=20, b=20),
@@ -314,12 +334,43 @@ def vec_len(vec):
     len_ = (x**2 + y**2 + z**2)**0.5
     return len_
 
+def box_tblr(points):
+    t, b, l, r = np.max(points[:, 1]), np.min(points[:, 1]), np.min(points[:, 0]), np.max(points[:, 0])
+    return t, b, l, r
+
+def points_to_image(points, height=500, point_size=None, is_imshow=False):
+    t, b, l, r = box_tblr(points)
+    w, h = r - l, t - b
+
+    pad_px = 1
+    mul_px = height / h
+
+    image = np.zeros((int(h * mul_px + 2 * pad_px), int(w * mul_px + 2 * pad_px)), dtype=np.uint8)
+
+    # ~~~~~~~~~~~~~
+    coords_x = np.around((points[:, 0] - l) * mul_px + pad_px).astype(np.int)
+    coords_y = np.around((points[:, 1] - b) * mul_px + pad_px).astype(np.int)
+
+    if point_size is None:
+        image[coords_y, coords_x] = 255
+    else:
+        for i in range(len(points)):
+            cv2.circle(image, (coords_x[i], coords_y[i]), point_size, 255, -1)
+
+    if is_imshow:
+        plt.figure(figsize=(10, 10))
+        plt.imshow(image)
+        plt.show()
+
+    return image
+
 FLOOR_TRIM_DIST_M = 0.1
 DOOR_ZONE_WIDTH_M = 0.05
 
 DOOR_STEP_M = 0.1
-DOOR_OPEN_THRESHOLD = 40
-DOOR_FULL_OPEN_M = 0.6
+DOOR_OPEN_THRESHOLD = 100
+DOOR_FULL_OPEN_M = 1.2
+DOOR_PX_PER_M = 250
 
 MIN_OBJECT_POINTS = 100
 
@@ -389,30 +440,39 @@ def clusterize(points, is_plotting=False) -> object or None:
         if is_plotting:
             show_points(door_points_zero_plane)
 
-        proj_axis = np.cross(tw_vector, pf_vector)
-        proj_axis2 = np.cross(tw_vector, proj_axis)
-        proj_axis2_norm = vec_norm(proj_axis2)
-        door_points_zero_plane_proj = projection(door_points_zero_plane, proj_axis2_norm)
-        print('proj_axis', proj_axis)
-        print('proj_axis2', proj_axis2)
+        axis_x = np.cross(tw_vector, pf_vector)
+        axis_y = np.cross(tw_vector, axis_x)
+        axis_x_norm = vec_norm(axis_x)
+        axis_y_norm = vec_norm(axis_y)
+        print('axis_x', axis_x)
+        print('proj_y', axis_y)
 
-        proj_vectors = np.zeros((len(door_points_zero_plane), 3))
-        for i in range(3):
-            proj_vectors[:, i] = door_points_zero_plane_proj * proj_axis2_norm[i]
-        door_points_zero_line = door_points_zero_plane - proj_vectors
+        points_x = projection(door_points_zero_plane, axis_x_norm)
+        points_y = projection(door_points_zero_plane, axis_y_norm)
+
+        door_points_2d = np.stack([points_x, points_y], axis=1)
+
+        y_min = np.min(door_points_2d[:,1])
+        y_max = y_min + 2
+        mask = door_points_2d[:,1] < y_max
+        door_points_2d = door_points_2d[mask]
+
+        print('door_points_2d.shape', door_points_2d.shape)
+
         if is_plotting:
-            show_points(door_points_zero_line)
+            show_points_2d(door_points_2d)
 
-        dp = projection(door_points_zero_plane, proj_axis)
-        dp.sort()
-        min_val = np.min(dp)
-        max_val = np.max(dp)
-        bin_bounds = np.arange(min_val, max_val, DOOR_STEP_M)
+        image = points_to_image(door_points_2d, height=DOOR_PX_PER_M*2, point_size=8, is_imshow=True)
+        h,w = image.shape
+        line = np.average(image, axis=0)
+
+        step = int(DOOR_STEP_M*DOOR_PX_PER_M)
+        print('step', step)
+        bin_bounds = np.arange(0, w, step)
         bins = []
         for i in range(len(bin_bounds) - 1):
-            bin_count = np.sum(
-                (dp >= bin_bounds[i]) * (dp < bin_bounds[i + 1])
-            )
+            line_segment = line[bin_bounds[i]:bin_bounds[i+1]]
+            bin_count = np.average(line_segment)
             bins.append(bin_count)
         bins = np.array(bins)
         bins_is_open = bins < DOOR_OPEN_THRESHOLD

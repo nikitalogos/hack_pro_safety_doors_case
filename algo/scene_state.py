@@ -93,10 +93,10 @@ class SceneState:
 
         if percent == 0:
             self.door = DoorStates.CLOSED
-        elif percent == 100:
-            self.door = DoorStates.OPEN
         elif percent == -1:
             self.door = DoorStates.UNKNOWN
+        elif percent > 80:
+            self.door = DoorStates.OPEN
         else:
             self.door = DoorStates.SEMI
 

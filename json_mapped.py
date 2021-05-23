@@ -434,39 +434,39 @@ vis = o3d.visualization.Visualizer()
     #ТУТ МЫ СЧИТЫВАЕМ JSON ФАЙЛ ПОЛНОСТЬЮ
 with open( file_json, "r", encoding='utf-8') as fel:
         text = json.load(fel)
-        boxes=get_box1(text)
+        boxes=get_box(text)
         #mybox = my_rect()
         READY=[]
 
-        lis=''
-        if text['events']==[]:
-            event='unknown'
-        else:
-
-            for event in text['events']:
-                lis=lis+'/'+event
-
-
-        is_can_move=text['is_can_move']
-        if is_can_move==False:
-            chat='Train can not move'
-        else:
-            chat='Train can move'
-        door_open_proc=str(text['door_open_percent'])
-        op=text['door']
-
-
-        chessboard_coord = o3d.geometry.TriangleMesh.create_coordinate_frame(
-            size=0.5, origin=[0, 0, 0])
-       # pcd_1 = text_3d(event, pos=[-1, 0, 0], font_size=350, density=1)
-        pcd_1 = text_3d('Door state: ' + op, pos=[-2, 0, 0], font_size=400, density=1)
-        if op!='unknown':
-            pcd_2 = text_3d('The door is ' + door_open_proc + '% open', pos=[-2, 0, 0.5], font_size=400, density=1)
-            pcd_4 = text_3d(chat, pos=[-2, 0, 1.5], font_size=400, density=1)
-        else:
-            pcd_2 = text_3d(' ', pos=[-2, 0, 0.5], font_size=400, density=1)
-            pcd_4 = text_3d(' ', pos=[-2, 0, 1.5], font_size=400, density=1)
-        pcd_3 = text_3d('Events: '+lis, pos=[-2, 0, 1.0], font_size=400, density=1)
+       #  lis=''
+       #  if text['events']==[]:
+       #      event='unknown'
+       #  else:
+       #
+       #      for event in text['events']:
+       #          lis=lis+'/'+event
+       #
+       #
+       #  is_can_move=text['is_can_move']
+       #  if is_can_move==False:
+       #      chat='Train can not move'
+       #  else:
+       #      chat='Train can move'
+       #  door_open_proc=str(text['door_open_percent'])
+       #  op=text['door']
+       #
+       #
+       #  chessboard_coord = o3d.geometry.TriangleMesh.create_coordinate_frame(
+       #      size=0.5, origin=[0, 0, 0])
+       # # pcd_1 = text_3d(event, pos=[-1, 0, 0], font_size=350, density=1)
+       #  pcd_1 = text_3d('Door state: ' + op, pos=[-2, 0, 0], font_size=400, density=1)
+       #  if op!='unknown':
+       #      pcd_2 = text_3d('The door is ' + door_open_proc + '% open', pos=[-2, 0, 0.5], font_size=400, density=1)
+       #      pcd_4 = text_3d(chat, pos=[-2, 0, 1.5], font_size=400, density=1)
+       #  else:
+       #      pcd_2 = text_3d(' ', pos=[-2, 0, 0.5], font_size=400, density=1)
+       #      pcd_4 = text_3d(' ', pos=[-2, 0, 1.5], font_size=400, density=1)
+       #  pcd_3 = text_3d('Events: '+lis, pos=[-2, 0, 1.0], font_size=400, density=1)
 
 
         #pcd_20 = text_3d('Test-20mm', pos=[0, 0, 0], font_size=20, density=2)
@@ -479,10 +479,10 @@ with open( file_json, "r", encoding='utf-8') as fel:
             READY.append(boxes[j])
 
        # READY.append(pcd_1)
-        READY.append(pcd_1)
-        READY.append(pcd_2)
-        READY.append(pcd_3)
-        READY.append(pcd_4)
+       #  READY.append(pcd_1)
+       #  READY.append(pcd_2)
+       #  READY.append(pcd_3)
+       #  READY.append(pcd_4)
         o3d.visualization.draw_geometries(READY,
                                               width=1024,
                                               height=980)

@@ -59,7 +59,7 @@ Tested on Windows 10 64x
 ```
 * PyAudio for Python 3.7 and Windows 64x
 ```bash
-   pip install PyAudio-0.2.11-cp37-cp37m-win_amd64.whl
+   pip install RES/PyAudio-0.2.11-cp37-cp37m-win_amd64.whl
 ```
 * Scikit-learn 0.24.2
 ```bash
